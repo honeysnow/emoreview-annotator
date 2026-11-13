@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Home – task queue</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F7F6F3;--surface:#FFFFFF;--line:#E7E4DD;--ink:#1F1E1B;--muted:#6B675F;--accent:#2F4BD8;--accent-soft:#EEF1FD}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.45}
+a{color:inherit;text-decoration:none}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.row-link:hover{background:#FAF9F6}
+</style>
+</helmet>
+<div style="min-height:900px;background:var(--bg);display:flex;flex-direction:column">
+
+  <header style="display:flex;align-items:center;gap:20px;padding:0 24px;min-height:56px;box-sizing:border-box;background:var(--surface);border-bottom:1px solid var(--line);flex-wrap:wrap">
+    <a href="Main.dc.html" style="display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px">
+      <span style="width:24px;height:24px;border-radius:7px;background:var(--accent);display:flex;align-items:center;justify-content:center">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="5" cy="7" r="3.5" stroke="#fff" stroke-width="1.5"/><circle cx="9" cy="7" r="3.5" stroke="#fff" stroke-width="1.5"/></svg>
+      </span>
+      Emotion Annotation
+    </a>
+    <nav style="display:flex;gap:4px;background:var(--bg);padding:3px;border-radius:9px">
+      <a href="Main.dc.html" style="padding:6px 14px;border-radius:7px;background:var(--surface);font-weight:500;box-shadow:0 1px 2px rgba(0,0,0,.06)">Tasks</a>
+      <a href="Annotate.dc.html" style="padding:6px 14px;border-radius:7px;color:var(--muted)">Annotate</a>
+      <a href="Review.dc.html" style="padding:6px 14px;border-radius:7px;color:var(--muted)">Review</a>
+    </nav>
+    <div style="flex:1"></div>
+    <a href="Export.dc.html" style="padding:8px 14px;border:1px solid var(--line);border-radius:9px;background:var(--surface);font-weight:500">Export</a>
+    <span style="display:flex;align-items:center;gap:8px;color:var(--muted)">
+      <span style="width:28px;height:28px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">HZY</span>
+    </span>
+  </header>
+
+  <main style="width:100%;max-width:1120px;margin:0 auto;box-sizing:border-box;padding:40px 24px 56px;display:flex;flex-direction:column;gap:28px">
+
+    <div>
+      <h1 style="margin:0;font-size:26px;font-weight:600;letter-spacing:-0.01em">Your tasks</h1>
+      <p style="margin:6px 0 0;color:var(--muted)">Pick up where you left off, or open a review.</p>
+    </div>
+
+    <div style="display:flex;gap:20px;flex-wrap:wrap">
+
+      <section style="flex:1 1 440px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:18px">
+        <div>
+          <div style="font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--accent)">ANNOTATE</div>
+          <h2 style="margin:6px 0 2px;font-size:18px;font-weight:600">TRAIN_1 · Clothing, Shoes &amp; Jewelry</h2>
+          <div style="color:var(--muted)">100 documents · 696 sentences · codebook v1</div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span>26 of 696 sentences</span><span style="color:var(--muted)">4%</span></div>
+          <div style="height:6px;background:var(--bg);border-radius:6px;overflow:hidden"><div style="width:4%;height:100%;background:var(--accent);border-radius:6px"></div></div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:auto">
+          <a href="Annotate.dc.html" style="padding:10px 18px;border-radius:9px;background:var(--accent);color:#fff;font-weight:500">Continue · DCS0002, sentence 6</a>
+          <a href="Export.dc.html" style="padding:10px 16px;border-radius:9px;border:1px solid var(--line);font-weight:500">Export annotations</a>
+        </div>
+      </section>
+
+      <section style="flex:1 1 440px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:18px">
+        <div>
+          <div style="font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--accent)">REVIEW</div>
+          <h2 style="margin:6px 0 2px;font-size:18px;font-weight:600">TRAIN_2 · Cell Phones &amp; Accessories</h2>
+          <div style="color:var(--muted)">OYC × TJH · 100 documents · 599 sentences</div>
+        </div>
+        <div style="display:flex;gap:32px">
+          <div><div style="font-size:24px;font-weight:600">468</div><div style="color:var(--muted);font-size:13px">annotated by both</div></div>
+          <div><div style="font-size:24px;font-weight:600">71%</div><div style="color:var(--muted);font-size:13px">mean field agreement</div></div>
+          <div><div style="font-size:24px;font-weight:600">47%</div><div style="color:var(--muted);font-size:13px">lowest · Emotion Cues</div></div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:auto">
+          <a href="Review.dc.html" style="padding:10px 18px;border-radius:9px;background:var(--accent);color:#fff;font-weight:500">Open review</a>
+          <a href="Export.dc.html" style="padding:10px 16px;border-radius:9px;border:1px solid var(--line);font-weight:500">Export comparison sheet</a>
+        </div>
+      </section>
+    </div>
+
+    <div style="border:1.5px dashed #CFCBC2;border-radius:14px;padding:18px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 13V3m0 0L6 7m4-4l4 4M3 13v3a1 1 0 001 1h12a1 1 0 001-1v-3" stroke="#6B675F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div style="flex:1 1 320px">
+        <div style="font-weight:500">Import a file</div>
+        <div style="color:var(--muted);font-size:13px">Drop a raw <code>TRAIN_*.xlsx</code> (DocumentID, SentID, Sentence) to annotate, or two annotated files to start a comparison.</div>
+      </div>
+      <button style="padding:9px 16px;border-radius:9px;border:1px solid var(--line);background:var(--surface);font:inherit;font-weight:500;cursor:pointer">Choose files</button>
+    </div>
+
+    <section>
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px">
+        <h2 style="margin:0;font-size:15px;font-weight:600">Documents · TRAIN_1</h2>
+        <span style="color:var(--muted);font-size:13px">Showing 5 of 100</span>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow-x:auto">
+        <div style="min-width:560px">
+        <div style="display:grid;grid-template-columns:1.2fr 1fr 2fr 1fr;gap:16px;padding:12px 20px;color:var(--muted);font-size:12px;font-weight:500;border-bottom:1px solid var(--line)">
+          <span>Document</span><span>Sentences</span><span>Progress</span><span>Status</span>
+        </div>
+        <sc-for list="{{docs}}" as="d" hint-placeholder-count="5">
+          <a href="Annotate.dc.html" class="row-link" style="display:grid;grid-template-columns:1.2fr 1fr 2fr 1fr;gap:16px;padding:14px 20px;align-items:center;border-bottom:1px solid var(--line)">
+            <span style="font-weight:500">{{d.id}}</span>
+            <span>{{d.n}}</span>
+            <span style="display:flex;align-items:center;gap:10px"><span style="flex:1;height:5px;background:var(--bg);border-radius:5px;overflow:hidden"><span style="display:block;height:100%;background:var(--accent);width:{{d.pct}}"></span></span><span style="color:var(--muted);font-size:12px;min-width:44px">{{d.done}}</span></span>
+            <span><span style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:500;background:{{d.bg}};color:{{d.fg}}">{{d.status}}</span></span>
+          </a>
+        </sc-for>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const done = { bg: '#E3F4F1', fg: '#0F766E' };
+    const prog = { bg: '#EEF1FD', fg: '#2F4BD8' };
+    const todo = { bg: '#F0EEE9', fg: '#6B675F' };
+    const mk = (id, n, d, status, c) => ({ id, n, done: d + ' / ' + n, pct: Math.round(100 * d / n) + '%', status, bg: c.bg, fg: c.fg });
+    return { docs: [
+      mk('DCS0001', 20, 20, 'Done', done),
+      mk('DCS0002', 26, 6, 'In progress', prog),
+      mk('DCS0003', 25, 0, 'Not started', todo),
+      mk('DCS0004', 6, 0, 'Not started', todo),
+      mk('DCS0005', 4, 0, 'Not started', todo)
+    ] };
+  }
+}
+</script>
+</body>
+</html>

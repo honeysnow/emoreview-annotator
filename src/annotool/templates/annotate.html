@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Annotate · {{ doc_id }}{% endblock %}
+{% block bodyclass %}{{ 'embed' if embed }}{% endblock %}
+{% block header_right %}
+<span class="muted crumb">{{ batch.name }} <span style="margin:0 6px">/</span> <span style="color:var(--ink);font-weight:500">{{ doc_id }}</span></span>
+<span style="flex:1"></span>
+<span class="savestate" id="savestate"><i></i><span>Saved</span></span>
+<a class="btn sm" href="/export?batch={{ batch.name }}&annotator={{ current }}&document={{ doc_id }}">Export</a>
+<button class="btn sm" id="rename-annotator" data-code="{{ current }}" title="Annotator code (used in export file names). Click to change.">Annotator: {{ current }}</button>
+{% endblock %}
+{% block content %}
+<div class="a-layout" id="app">
+  <aside class="a-left">
+    <div class="a-left-head">
+      <div class="row" style="margin:0"><b>Sentences</b><span class="muted" id="done-count"></span></div>
+      <div class="bar thin"><i id="done-bar"></i></div>
+    </div>
+    <div id="sentence-list"></div>
+  </aside>
+
+  <main class="a-main">
+    <section class="panel">
+      <div class="row small muted"><span id="sent-label" style="font-weight:500;letter-spacing:.06em"></span><span>Click words to fill the field below · Shift-click extends a span · drag selects a range</span></div>
+      <div id="tokens" class="tokens"></div>
+      <div class="legend" id="legend"></div>
+    </section>
+
+    <section class="panel" style="gap:22px">
+      <div class="trio">
+        <div><div class="h">1 · Polarity</div><div class="muted small hint">Pick more than one if mixed. “none” skips the rest.</div><div class="chips" id="pol"></div></div>
+        <div class="rest"><div class="h">2 · Arousal</div><div class="muted small hint">Overall activation, calm → excited.</div><div class="chips" id="aro"></div><div class="muted small" id="aro-hint" style="margin-top:8px;min-height:18px"></div></div>
+        <div class="rest"><div class="h">3 · Emotion source</div><div class="muted small hint">Whose emotion is expressed?</div><div class="chips" id="src"></div></div>
+      </div>
+      <div id="none-note" class="note" hidden>No emotion expressed. Arousal, tags, cues, source, cause and experiencer are skipped for this sentence.</div>
+    </section>
+
+    <section class="panel rest" id="emo-panel">
+      <div class="row" style="margin:0;flex-wrap:wrap">
+        <div class="h" style="margin:0">4 · Emotions in this sentence</div>
+        <div class="chips" id="emo-tabs"></div>
+      </div>
+      <div id="emo-empty" class="note center" hidden>Choose a polarity above to start adding emotions.</div>
+      <div id="emo-body" hidden>
+        <div class="row" style="justify-content:flex-start;gap:12px;flex-wrap:wrap;margin:0">
+          <span class="muted small">Emotion tag</span><b id="tag-name" style="font-size:18px"></b>
+          <button class="btn sm" id="tag-toggle">Change</button>
+          <span style="flex:1"></span><span class="muted small">Primary emotion first</span>
+        </div>
+        <div id="tag-picker" class="tagpick" hidden></div>
+        <div id="legacy-note" class="attn" hidden></div>
+        <div class="slots" id="slots"></div>
+      </div>
+    </section>
+
+    <div class="footer">
+      <button class="btn" id="prev">← Previous</button>
+      <button class="btn" id="mark-none">No emotion in this sentence</button>
+      <span style="flex:1"></span>
+      <button class="btn link" id="help-open" type="button" title="Keyboard shortcuts">Shortcuts (?)</button>
+      <button class="btn primary" id="next" style="padding:10px 22px">Save &amp; next →</button>
+    </div>
+  </main>
+
+  <aside class="a-right">
+    <section class="panel sm"><div class="row" style="margin-bottom:10px"><b>Export preview</b><span class="muted small" id="prev-label"></span></div><div id="preview" class="preview"></div></section>
+    <section class="panel sm"><b style="display:block;margin-bottom:10px">Checks</b><div id="checks" class="checks"></div></section>
+    <section class="panel sm" id="attn-panel" hidden><b style="display:block;margin-bottom:4px">Imported data to check</b><div class="muted small" style="margin-bottom:10px">Kept from the legacy file. Mark each as checked once handled.</div><div id="attn"></div></section>
+    <section class="panel sm"><div class="row" style="margin-bottom:6px"><b>Codebook</b><span class="muted small" id="cb-tag">—</span></div><div id="cb-def" style="font-size:13px"></div><div class="muted small" style="margin-top:8px">Hover a tag to preview its definition.</div></section>
+  </aside>
+</div>
+<div id="help" class="modal" hidden><div class="modal-card small"><b>Keyboard shortcuts</b>
+  <table class="keys"><tr><td><kbd>1</kbd>–<kbd>5</kbd></td><td>Set arousal</td></tr><tr><td><kbd>←</kbd> <kbd>→</kbd></td><td>Previous / next sentence</td></tr>
+  <tr><td><kbd>Enter</kbd></td><td>Save &amp; next</td></tr><tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Next / previous slot (cues, object, action, experiencer)</td></tr>
+  <tr><td>Click · <kbd>Shift</kbd>-click · drag</td><td>Add or remove a word · extend a span · select a range</td></tr><tr><td><kbd>?</kbd></td><td>Show / hide this list</td></tr></table>
+  <p class="muted small">Shortcuts are off while you type in a text box. Changes save automatically.</p>
+  <div class="actions"><button class="btn" id="help-close" type="button">Close</button></div></div></div>
+<script type="application/json" id="boot">{{ boot|tojson }}</script>
+<script src="/static/annotate.js"></script>
+{% endblock %}

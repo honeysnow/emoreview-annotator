@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block header_right %}{% if current %}<button class="avatar" id="rename-annotator" data-code="{{ current }}" title="Annotator code (used in export file names). Click to change.">{{ current }}</button>{% endif %}{% endblock %}
+{% block content %}
+<main>
+  <div>
+    <h1>Your tasks</h1>
+    <p class="muted" style="margin:6px 0 0">Pick up where you left off, or open a review.</p>
+  </div>
+
+  <div id="flash" hidden></div>
+
+  <div class="cards">
+    {% for c in cards %}
+    <section class="card">
+      <div>
+        <div class="eyebrow">ANNOTATE</div>
+        <h2 class="title">{{ c.title }}</h2>
+        <div class="muted">{{ c.docs }} documents · {{ c.n }} sentences</div>
+        <div class="chips owners" title="Whose work to show. Each annotator's work is kept separate.">
+          {% for o in c.owners %}<a class="chip sm{% if o.code == c.annotator %} on{% endif %}" href="/?batch={{ c.batch.name }}&view={{ o.code }}">{{ o.code }} · {{ o.done }}</a>{% endfor %}
+        </div>
+      </div>
+      <div>
+        <div class="row" style="margin-bottom:8px"><span>{{ c.done }} of {{ c.n }} sentences</span><span class="muted">{{ c.pct }}%</span></div>
+        <div class="bar"><i style="width:{{ c.pct }}%"></i></div>
+      </div>
+      <div class="actions">
+        {% if c.resume %}<a class="btn primary" href="/annotate/{{ c.batch.name }}/{{ c.resume.sent_id }}?annotator={{ c.annotator }}">{{ "Continue" if c.done else "Start" }} · {{ c.resume.document_id }}, {{ c.resume.sent_id }}</a>{% endif %}
+        <a class="btn" href="/export?batch={{ c.batch.name }}&annotator={{ c.annotator }}">Export annotations</a>
+        <button class="btn link" type="button" data-remove-batch="{{ c.batch.name }}" data-count="{{ c.n_ann }} annotation(s)">Remove…</button>
+      </div>
+    </section>
+    {% endfor %}
+    {% for r in reviews %}
+    <section class="card">
+      <div>
+        <div class="eyebrow">REVIEW</div>
+        <h2 class="title">{{ r.batch.name }}</h2>
+        <div class="muted">{{ r.a }} × {{ r.b }} · {{ r.docs }} documents · {{ r.summary.rows }} sentences</div>
+      </div>
+      <div style="display:flex;gap:32px;flex-wrap:wrap">
+        <div><div style="font-size:24px;font-weight:600">{{ r.summary.both }}</div><div class="muted" style="font-size:13px">annotated by both</div></div>
+        <div><div style="font-size:24px;font-weight:600">{{ "%.0f"|format(r.summary.mean) }}%</div><div class="muted" style="font-size:13px">mean field agreement</div></div>
+        <div><div style="font-size:24px;font-weight:600">{{ "%.0f"|format(r.summary.lowest) }}%</div><div class="muted" style="font-size:13px">lowest · {{ r.summary.lowest_field }}</div></div>
+        <div><div style="font-size:24px;font-weight:600">{{ r.open }}</div><div class="muted" style="font-size:13px">sentences with open fields</div></div>
+      </div>
+      <div class="actions">
+        {% if r.first %}<a class="btn primary" href="/review/{{ r.batch.name }}/{{ r.first }}">Open review</a>{% endif %}
+        <a class="btn" href="/export?type=comparison&review={{ r.batch.name }}">Export comparison sheet</a>
+        <button class="btn link" type="button" data-remove-batch="{{ r.batch.name }}" data-count="{{ r.n_dec }} review decision(s) and notes">Remove…</button>
+      </div>
+    </section>
+    {% endfor %}
+    {% if not reviews %}
+    <section class="card">
+      <div>
+        <div class="eyebrow">REVIEW</div>
+        <h2 class="title">No comparison loaded</h2>
+        <div class="muted">Import a <code>…Comparison_Sheet….xlsx</code> (two annotators plus Final) to start a review.</div>
+      </div>
+    </section>
+    {% endif %}
+  </div>
+
+  {% if review_options %}
+  <div class="dropzone" id="start-review">
+    <div class="txt">
+      <div style="font-weight:500">Start a review</div>
+      <div class="muted" style="font-size:13px">Combine two annotators' work on the same batch into a comparison. Their annotations are copied; the originals are not changed.</div>
+    </div>
+    <select id="rv-batch">{% for o in review_options %}<option value="{{ o.batch }}" data-people="{{ o.annotators|join(',') }}">{{ o.batch }}</option>{% endfor %}</select>
+    <select id="rv-a"></select><span class="muted">×</span><select id="rv-b"></select>
+    <button class="btn primary" id="rv-go" type="button" style="padding:9px 16px">Start review</button>
+  </div>
+  {% endif %}
+
+  <div class="dropzone">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 13V3m0 0L6 7m4-4l4 4M3 13v3a1 1 0 001 1h12a1 1 0 001-1v-3" stroke="#6B675F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div class="txt">
+      <div style="font-weight:500">Import a file</div>
+      <div class="muted" style="font-size:13px">Choose a raw <code>TRAIN_*.xlsx</code> (DocumentID, SentID, Sentence) to annotate, an annotated <code>CODE_TRAIN_*.xlsx</code> to load existing work, or a comparison sheet to review. Files dropped in <code>data/raw</code> or <code>data/imports</code> are picked up when you click Rescan.</div>
+    </div>
+    <input type="file" id="file-input" accept=".xlsx" multiple hidden>
+    <button class="btn" id="choose-files">Choose files</button>
+    <button class="btn" id="rescan">Rescan</button>
+  </div>
+
+  {% if selected %}
+  <section>
+    <div class="row">
+      <h2>Documents · {{ selected.title }} · {{ selected.annotator }}</h2>
+      <span class="muted" style="font-size:13px">{{ docs|length }} documents{% if cards|length > 1 %} ·
+        {% for c in cards %}<a href="/?batch={{ c.batch.name }}&view={{ c.annotator }}" {% if c.batch.name == selected.title and c.annotator == selected.annotator %}style="font-weight:600"{% endif %}>{{ c.title }} · {{ c.annotator }}</a>{% if not loop.last %}, {% endif %}{% endfor %}{% endif %}</span>
+    </div>
+    <div class="table"><div class="inner">
+      <div class="tr head"><span>Document</span><span>Sentences</span><span>Progress</span><span>Status</span></div>
+      {% for d in docs %}
+      <a class="tr row-link" href="/annotate/{{ selected.batch.name }}/{{ d.first_sent }}?annotator={{ selected.annotator }}">
+        <span style="font-weight:500">{{ d.id }}</span>
+        <span>{{ d.n }}</span>
+        <span style="display:flex;align-items:center;gap:10px"><span class="mini"><i style="width:{{ d.pct }}%"></i></span><span class="muted" style="font-size:12px;min-width:44px">{{ d.done }} / {{ d.n }}</span></span>
+        <span><span class="pill {{ d.cls }}">{{ d.label }}</span></span>
+      </a>
+      {% endfor %}
+    </div></div>
+  </section>
+  {% else %}
+  <p class="muted">No documents yet. Put a raw file in <code>data/raw/</code> and click Rescan, or use Choose files.</p>
+  {% endif %}
+</main>
+{% endblock %}

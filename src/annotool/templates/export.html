@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Export{% endblock %}
+{% block header_right %}{% if current %}<button class="avatar" id="rename-annotator" data-code="{{ current }}" title="Annotator code (used in export file names). Click to switch.">{{ current }}</button>{% endif %}{% endblock %}
+{% block content %}
+<main style="max-width:1200px">
+  <div>
+    <h1>Export</h1>
+    <p class="muted" style="margin:6px 0 0">Download in the same spreadsheet layout you already use. Separators (<code>;;</code> <code>&amp;&amp;</code> <code>//</code>) are generated for you.</p>
+  </div>
+  {% if not boot %}
+  <p class="muted">Nothing to export yet. Import a raw file on the Tasks page first.</p>
+  {% else %}
+  <div class="export-grid">
+    <section class="panel" style="flex:0 0 340px;gap:22px">
+      <div>
+        <div class="h" style="margin-bottom:10px">1 · What to export</div>
+        <button class="opt" type="button" id="type-ann" {% if not boot.batch %}disabled style="opacity:.55;cursor:not-allowed"{% endif %}><b>Annotations</b><small>One annotator · 11 columns, one row per sentence</small></button>
+        <button class="opt" type="button" id="type-cmp" style="margin-top:8px;{% if not boot.reviews %}opacity:.55;cursor:not-allowed{% endif %}" {% if not boot.reviews %}disabled{% endif %}><b>Comparison sheet</b><small>{% if boot.reviews %}A | B | Final | match per field · 35 columns{% else %}Start a review on the Tasks page first{% endif %}</small></button>
+      </div>
+
+      <div id="panel-ann">
+        <div style="margin-bottom:22px">
+          <div class="h" style="margin-bottom:10px">2 · Which rows</div>
+          <div class="radios">
+            <label><input type="radio" name="scope" value="all" checked> All documents · {{ boot.total }} sentences</label>
+            <label><input type="radio" name="scope" value="document"> One document
+              <select id="document">{% for d in boot.documents %}<option value="{{ d.id }}" {% if d.id == boot.document %}selected{% endif %}>{{ d.id }} · {{ d.n }}</option>{% endfor %}</select></label>
+            <label><input type="radio" name="scope" value="completed"> Completed sentences only</label>
+          </div>
+        </div>
+        <div class="h" style="margin-bottom:10px">3 · Options</div>
+        <label class="checkrow"><input type="checkbox" id="opt-unannotated" checked><span>Include sentences not yet annotated<small>Leaves their fields blank</small></span></label>
+        <label class="checkrow"><input type="checkbox" id="opt-warn" checked><span>Warn about incomplete rows<small>Asks for confirmation before download</small></span></label>
+        <label class="checkrow"><input type="checkbox" id="opt-prefix" checked><span>Prefix each cue with its tag<small>happiness: durable (decision 3). Off gives plain cues.</small></span></label>
+      </div>
+
+      <div id="panel-cmp" hidden>
+        <div style="margin-bottom:22px">
+          <div class="h" style="margin-bottom:10px">2 · Which review and rows</div>
+          <select id="review" style="margin-bottom:10px;width:100%;font:inherit;padding:7px 8px;border:1px solid var(--line);border-radius:8px">
+            {% for r in boot.reviews %}<option value="{{ r.name }}" {% if r.name == boot.review %}selected{% endif %}>{{ r.name }} · {{ r.a }} × {{ r.b }}</option>{% endfor %}
+          </select>
+          <div class="radios">
+            <label><input type="radio" name="cscope" value="all" checked> <span id="c-all">All sentences</span></label>
+            <label><input type="radio" name="cscope" value="disagreements"> <span id="c-dis">Disagreements only</span></label>
+            <label><input type="radio" name="cscope" value="unresolved"> <span id="c-open">Unresolved only</span></label>
+          </div>
+        </div>
+        <div class="h" style="margin-bottom:10px">3 · Options</div>
+        <label class="checkrow"><input type="checkbox" id="opt-formulas" checked><span>Include match formulas<small>Live =IF(EXACT(…)) cells, as in the original sheet</small></span></label>
+        <label class="checkrow"><input type="checkbox" id="opt-agree" checked><span>Include agreement % row<small>Row 1 above each field group</small></span></label>
+        <label class="checkrow"><input type="checkbox" id="opt-note"><span>Add reviewer note column<small>Notes typed during review</small></span></label>
+        <label class="checkrow"><input type="checkbox" id="opt-cprefix" checked><span>Prefix each cue with its tag<small>Off reproduces the old sheet's plain cues.</small></span></label>
+      </div>
+    </section>
+
+    <section style="flex:1 1 560px;min-width:0;display:flex;flex-direction:column;gap:16px">
+      <div class="panel" style="padding:0;gap:0;overflow:hidden">
+        <div class="row" style="padding:16px 20px;border-bottom:1px solid var(--line);margin:0">
+          <div><b>Preview</b><div class="muted small mono" id="filename"></div></div>
+          <div class="muted" id="summary"></div>
+        </div>
+        <div style="overflow-x:auto"><table id="pv" class="pv"></table></div>
+        <div class="muted small" id="more" style="padding:10px 12px"></div>
+      </div>
+      <div id="warnings" class="attn" hidden></div>
+      <div class="row" style="justify-content:flex-end;gap:10px;margin:0">
+        <span id="status" class="muted small" style="flex:1"></span>
+        <a class="btn" href="/">Cancel</a>
+        <button class="btn" id="dl-csv" type="button">Download .csv</button>
+        <button class="btn primary" id="dl-xlsx" type="button" style="padding:10px 22px">Download .xlsx</button>
+      </div>
+      <div class="muted small" id="foot">Every export is also saved under <code>data/exports/</code>.</div>
+    </section>
+  </div>
+  <script type="application/json" id="boot">{{ boot|tojson }}</script>
+  <script src="/static/export.js"></script>
+  {% endif %}
+</main>
+{% endblock %}

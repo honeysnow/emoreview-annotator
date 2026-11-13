@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Settings{% endblock %}
+{% block header_right %}{% if current %}<button class="avatar" id="rename-annotator" data-code="{{ current }}" title="Current user. Click to switch.">{{ current }}</button>{% endif %}{% endblock %}
+{% block content %}
+<main>
+  <div><h1>Settings</h1><p class="muted" style="margin:6px 0 0">Annotators and where the app keeps its files.</p></div>
+
+  <section class="panel">
+    <div class="row" style="margin:0"><div><b>Annotators</b><div class="muted small">The code is used in export file names. Each annotator's work is kept separate.</div></div>
+      <button class="btn" id="add-annotator" type="button">+ Add annotator</button></div>
+    <div class="table"><div class="inner">
+      <div class="tr head" style="grid-template-columns:1fr 1fr 1fr"><span>Code</span><span>Annotated sentences</span><span></span></div>
+      {% for p in people %}<div class="tr" style="grid-template-columns:1fr 1fr 1fr"><span style="font-weight:500">{{ p.code }}{% if p.code == current %} <span class="pill resolved">you</span>{% endif %}</span><span>{{ p.n }}</span>
+        <span><button class="btn sm rename-btn" type="button" data-code="{{ p.code }}">Rename… (moves its data)</button></span></div>{% endfor %}
+    </div></div>
+  </section>
+
+  <section class="panel">
+    <b>Folders</b>
+    <div class="muted small">Everything lives under <code class="mono">{{ dirs.root }}</code>. Only <code>annotool.db</code> is written to while you work; your input files are never modified.</div>
+    <div class="folders">
+      <div><b><code>raw/</code></b><p>Raw review files (<code>TRAIN_*.xlsx</code>: DocumentID, SentID, Sentence). Each one becomes a batch to annotate. Read-only.</p>
+        <ul>{% for f in raw %}<li>{{ f }}</li>{% else %}<li class="muted">empty</li>{% endfor %}</ul></div>
+      <div><b><code>imports/</code></b><p>Work that already exists: annotated files (<code>CODE_TRAIN_*.xlsx</code>) and comparison sheets (name contains “Comparison”). Read once on Rescan; never modified.</p>
+        <ul>{% for f in imports %}<li>{{ f }}</li>{% else %}<li class="muted">empty</li>{% endfor %}</ul></div>
+      <div><b><code>reports/</code></b><p>One import report (CSV) per annotated or comparison import: auto-corrected values and rows that need a check. Written by the app.</p>
+        <ul>{% for f in reports %}<li><a href="/api/reports/{{ f }}">{{ f }}</a></li>{% else %}<li class="muted">none yet</li>{% endfor %}</ul></div>
+      <div><b><code>exports/</code></b><p>A timestamped copy of every file you download. Written by the app.</p>
+        <ul>{% for f in exports %}<li>{{ f }}</li>{% else %}<li class="muted">none yet</li>{% endfor %}</ul></div>
+    </div>
+  </section>
+</main>
+{% endblock %}

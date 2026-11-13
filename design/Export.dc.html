@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Export</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F7F6F3;--surface:#FFFFFF;--line:#E7E4DD;--ink:#1F1E1B;--muted:#6B675F;--accent:#2F4BD8;--accent-soft:#EEF1FD}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.45}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.opt:hover{border-color:#B9B5AC}
+</style>
+</helmet>
+<div style="min-height:900px;background:var(--bg);display:flex;flex-direction:column">
+
+  <header style="display:flex;align-items:center;gap:20px;padding:0 24px;min-height:56px;box-sizing:border-box;background:var(--surface);border-bottom:1px solid var(--line);flex-wrap:wrap">
+    <a href="Main.dc.html" style="display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px">
+      <span style="width:24px;height:24px;border-radius:7px;background:var(--accent);display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="5" cy="7" r="3.5" stroke="#fff" stroke-width="1.5"/><circle cx="9" cy="7" r="3.5" stroke="#fff" stroke-width="1.5"/></svg></span>
+      Emotion Annotation
+    </a>
+    <nav style="display:flex;gap:4px;background:var(--bg);padding:3px;border-radius:9px">
+      <a href="Main.dc.html" style="padding:6px 14px;border-radius:7px;color:var(--muted)">Tasks</a>
+      <a href="Annotate.dc.html" style="padding:6px 14px;border-radius:7px;color:var(--muted)">Annotate</a>
+      <a href="Review.dc.html" style="padding:6px 14px;border-radius:7px;color:var(--muted)">Review</a>
+    </nav>
+    <div style="flex:1"></div>
+    <span style="padding:8px 14px;border:1px solid var(--accent);border-radius:9px;background:var(--accent-soft);color:var(--accent);font-weight:500">Export</span>
+    <span style="width:28px;height:28px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">HZY</span>
+  </header>
+
+  <main style="width:100%;max-width:1200px;margin:0 auto;box-sizing:border-box;padding:36px 24px 48px;display:flex;flex-direction:column;gap:24px">
+    <div>
+      <h1 style="margin:0;font-size:26px;font-weight:600;letter-spacing:-0.01em">Export</h1>
+      <p style="margin:6px 0 0;color:var(--muted)">Download in the same spreadsheet layout you already use. Separators (<code>;;</code> <code>&amp;&amp;</code> <code>//</code>) are generated for you.</p>
+    </div>
+
+    <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start">
+
+      <!-- options -->
+      <section style="flex:0 0 340px;display:flex;flex-direction:column;gap:22px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px;box-sizing:border-box">
+        <div>
+          <div style="font-weight:600;margin-bottom:10px">1 · What to export</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <sc-for list="{{types}}" as="t" hint-placeholder-count="2">
+              <button class="opt" aria-pressed="{{t.on}}" onClick="{{t.pick}}" style="text-align:left;padding:12px 14px;border-radius:10px;cursor:pointer;border:1.5px solid {{t.border}};background:{{t.bg}}">
+                <div style="font-weight:500">{{t.title}}</div>
+                <div style="font-size:12px;color:var(--muted);margin-top:2px">{{t.sub}}</div>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-weight:600;margin-bottom:10px">2 · Which rows</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <sc-for list="{{scopes}}" as="s" hint-placeholder-count="3">
+              <button class="opt" aria-pressed="{{s.on}}" onClick="{{s.pick}}" style="display:flex;align-items:center;gap:10px;text-align:left;padding:9px 12px;border-radius:9px;cursor:pointer;border:1px solid {{s.border}};background:{{s.bg}}">
+                <span style="flex:0 0 14px;height:14px;border-radius:50%;box-sizing:border-box;border:1.5px solid {{s.dotBorder}};background:{{s.dotBg}};box-shadow:inset 0 0 0 2px #fff"></span>{{s.label}}
+              </button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-weight:600;margin-bottom:10px">3 · Options</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <sc-for list="{{options}}" as="o" hint-placeholder-count="3">
+              <button onClick="{{o.pick}}" role="checkbox" aria-checked="{{o.on}}" style="display:flex;align-items:flex-start;gap:10px;text-align:left;padding:2px 0;border:0;background:transparent;cursor:pointer">
+                <span style="flex:0 0 18px;height:18px;margin-top:1px;border-radius:5px;box-sizing:border-box;border:1.5px solid {{o.border}};background:{{o.bg}};color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">{{o.mark}}</span>
+                <span><span style="display:block">{{o.label}}</span><span style="display:block;font-size:12px;color:var(--muted)">{{o.sub}}</span></span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+
+      <!-- preview -->
+      <section style="flex:1 1 560px;min-width:0;display:flex;flex-direction:column;gap:16px">
+        <div style="background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 20px;border-bottom:1px solid var(--line)">
+            <div>
+              <div style="font-weight:600">Preview</div>
+              <div style="font-size:12px;color:var(--muted);font-family:'JetBrains Mono',ui-monospace,monospace;margin-top:2px">{{filename}}</div>
+            </div>
+            <div style="font-size:13px;color:var(--muted)">{{summary}}</div>
+          </div>
+          <div style="overflow-x:auto;padding-bottom:4px">
+            <div style="min-width:max-content">
+              <sc-if value="{{hasGroups}}" hint-placeholder-val="{{false}}">
+                <div style="display:grid;grid-template-columns:{{cols}};border-bottom:1px solid var(--line);background:#FAF9F6">
+                  <sc-for list="{{groups}}" as="g" hint-placeholder-count="5">
+                    <div style="grid-column:span {{g.span}};padding:8px 12px;font-size:12px;font-weight:600;border-left:{{g.border}};white-space:nowrap">{{g.t}} <span style="font-weight:400;color:var(--muted)">{{g.pct}}</span></div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <div style="display:grid;grid-template-columns:{{cols}};border-bottom:1px solid var(--line);background:#FAF9F6">
+                <sc-for list="{{head}}" as="h" hint-placeholder-count="11">
+                  <div style="padding:9px 12px;font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap;border-left:{{h.border}}">{{h.t}}</div>
+                </sc-for>
+              </div>
+              <sc-for list="{{rows}}" as="r" hint-placeholder-count="2">
+                <div style="display:grid;grid-template-columns:{{cols}};border-bottom:1px solid var(--line)">
+                  <sc-for list="{{r.cells}}" as="c" hint-placeholder-count="11">
+                    <div style="padding:10px 12px;font-size:12px;font-family:'JetBrains Mono',ui-monospace,monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border-left:{{c.border}};background:{{c.bg}};color:{{c.fg}};font-weight:{{c.weight}}" title="{{c.t}}">{{c.t}}</div>
+                  </sc-for>
+                </div>
+              </sc-for>
+              <div style="padding:10px 12px;font-size:12px;color:var(--muted)">{{more}}</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <span style="flex:1;color:var(--muted);font-size:13px">{{footnote}}</span>
+          <a href="Main.dc.html" style="padding:10px 16px;border-radius:9px;border:1px solid var(--line);background:var(--surface);font-weight:500">Cancel</a>
+          <button style="padding:10px 16px;border-radius:9px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-weight:500">Download .csv</button>
+          <button style="padding:10px 22px;border-radius:9px;border:0;background:var(--accent);color:#fff;cursor:pointer;font-weight:500">Download .xlsx</button>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+const ANN_HEAD = ['DocumentID', 'SentID', 'Sentence', 'Polarity', 'Arousal', 'Emotion Tag', 'Emotion Cues', 'Emotion Source', 'Emotion Cause Object', 'Emotion Cause Action', 'Emotion Experiencer'];
+const ANN_ROWS = [
+  ['DCS0002', 'CS000026', 'it looks nice , but it does not keep me warm in northern colorado where we dip into negative temps & have crazy high winds .', 'negative;; positive', '3', 'disappointment;; happiness', 'disappointment: does not keep me warm;; happiness: looks nice', 'self', 'it;; it', 'does not keep me warm;; looks nice', 'me;; me'],
+  ['DCS0002', 'CS000027', 'i was not impressed with it .', 'negative', '2', 'disappointment', 'disappointment: not impressed', 'self', 'it', 'none', 'i']
+];
+const CMP_FIELDS = [['Polarity', '79%'], ['Arousal', '77%'], ['Emotion Tag', '76%'], ['Emotion Cues', '47%']];
+const CMP_ROWS = [
+  ['DCP0101', 'CP000723', 'the cables are braided and seem durable .', ['positive', 'positive', 'positive', '-'], ['3', '3', '3', '-'], ['happiness', 'happiness', 'happiness', '-'], ['durable', 'none', '', 'X']],
+  ['DCP0102', 'CP000728', "it offers adequate protection to my daughter 's iphone .", ['positive', 'positive', 'positive', '-'], ['3', '3', '3', '-'], ['happiness', 'happiness', 'happiness', '-'], ['adequate protection', 'none', '', 'X']]
+];
+
+class Component extends DCLogic {
+  D() {
+    if (!this._D) this._D = { type: 'ann', scope: 0, o: { ann: [true, false], cmp: [true, true, false] } };
+    return this._D;
+  }
+  renderVals() {
+    const self = this;
+    const D = this.D();
+    const upd = () => self.forceUpdate();
+    const ann = D.type === 'ann';
+
+    const types = [
+      ['ann', 'Annotations', 'HZY_TRAIN_1 layout · 11 columns, one row per sentence'],
+      ['cmp', 'Comparison sheet', 'TRAIN_2 layout · OYC | TJH | Final | match per field']
+    ].map((t) => {
+      const on = D.type === t[0];
+      return { title: t[1], sub: t[2], on, border: on ? '#2F4BD8' : '#E7E4DD', bg: on ? '#EEF1FD' : '#FFFFFF', pick: () => { D.type = t[0]; D.scope = 0; upd(); } };
+    });
+    const scopeLabels = ann ? ['All documents · 696 sentences', 'DCS0002 only · 26 sentences', 'Completed sentences only'] : ['All sentences · 599', 'Disagreements only', 'Unresolved only'];
+    const scopes = scopeLabels.map((l, i) => {
+      const on = D.scope === i;
+      return { label: l, on, border: on ? '#2F4BD8' : '#E7E4DD', bg: on ? '#EEF1FD' : '#FFFFFF', dotBorder: on ? '#2F4BD8' : '#B9B5AC', dotBg: on ? '#2F4BD8' : '#FFFFFF', pick: () => { D.scope = i; upd(); } };
+    });
+    const optDefs = ann
+      ? [['Include sentences not yet annotated', 'Leaves their fields blank']]
+      .concat([['Warn about incomplete rows', 'Shows a list before download']])
+      : [['Include match formulas', 'Live =IF(EXACT(…)) cells, as in the original sheet'], ['Include agreement % row', 'Row 1 above each field group'], ['Add reviewer note column', 'Notes typed during review']];
+    const flags = ann ? D.o.ann : D.o.cmp;
+    const options = optDefs.map((o, i) => {
+      const on = !!flags[i];
+      return { label: o[0], sub: o[1], on, mark: on ? '✓' : '', border: on ? '#2F4BD8' : '#B9B5AC', bg: on ? '#2F4BD8' : '#FFFFFF', pick: () => { flags[i] = !flags[i]; upd(); } };
+    });
+
+    let head, rows, groups = [], cols, filename, summary, more, footnote;
+    const plain = (t) => ({ t, border: 'none', bg: 'transparent', fg: '#1F1E1B', weight: '400' });
+    if (ann) {
+      cols = '84px 84px 280px 130px 64px 170px 280px 90px 120px 190px 120px';
+      head = ANN_HEAD.map((t) => ({ t, border: 'none' }));
+      rows = ANN_ROWS.map((r) => ({ cells: r.map(plain) }));
+      filename = 'HZY_TRAIN_1_clothing_shoes_and_jewelry_annotation.xlsx';
+      summary = [696, 26, 25][D.scope] + ' rows · 11 columns';
+      more = '… and ' + ([694, 24, 23][D.scope]) + ' more rows';
+      footnote = 'Multiple emotions are joined with “;;”, spans with “&&”, one object with several actions with “//”.';
+    } else {
+      cols = '84px 84px 220px' + ' 120px 120px 120px 56px'.repeat(4);
+      head = [{ t: 'DocumentID', border: 'none' }, { t: 'SentID', border: 'none' }, { t: 'Sentence', border: 'none' }];
+      groups = [{ t: '', span: 3, border: 'none', pct: '' }];
+      CMP_FIELDS.forEach((f) => {
+        groups.push({ t: f[0], span: 4, border: '1px solid #E7E4DD', pct: D.o.cmp[1] ? '· ' + f[1] + ' agree' : '' });
+        head.push({ t: 'OYC', border: '1px solid #E7E4DD' }, { t: 'TJH', border: 'none' }, { t: 'Final', border: 'none' }, { t: 'OYC×TJH', border: 'none' });
+      });
+      rows = CMP_ROWS.map((r) => {
+        const cells = [plain(r[0]), plain(r[1]), plain(r[2])];
+        for (let g = 3; g < 7; g++) {
+          r[g].forEach((v, k) => {
+            const isMatch = k === 3;
+            const c = { t: v, border: k === 0 ? '1px solid #E7E4DD' : 'none', bg: 'transparent', fg: '#1F1E1B', weight: '400' };
+            if (isMatch) { c.fg = v === 'X' ? '#B45309' : '#6B675F'; c.weight = v === 'X' ? '600' : '400'; c.bg = v === 'X' ? '#FDF0E1' : 'transparent'; }
+            if (k === 2 && v === '') c.bg = '#FAF9F6';
+            cells.push(c);
+          });
+        }
+        return { cells };
+      });
+      filename = 'TRAIN_2_EmoReview40K_Comparison_Sheet_20261112.xlsx';
+      summary = [599, 'disagreeing', 'unresolved'][D.scope] === 599 ? '599 rows · 35 columns' : (D.scope === 1 ? 'Rows with at least one X · 35 columns' : 'Rows with a blank Final on an X · 35 columns');
+      more = '… 4 more field groups: Emotion Source, Cause Object, Cause Action, Emotion Experiencer';
+      footnote = '“-” = exact match, “X” = differs. Final is blank until the reviewer resolves the disagreement.';
+    }
+    return { types, scopes, options, head, rows, groups, hasGroups: !ann, cols, filename, summary, more, footnote };
+  }
+}
+</script>
+</body>
+</html>

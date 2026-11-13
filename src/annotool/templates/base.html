@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Emotion Annotation{% endblock %}</title>
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body class="{% block bodyclass %}{% endblock %}">
+<header class="top">
+  <a href="/" class="brand">
+    <span class="mark"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="5" cy="7" r="3.5" stroke="#fff" stroke-width="1.5"/><circle cx="9" cy="7" r="3.5" stroke="#fff" stroke-width="1.5"/></svg></span>
+    Emotion Annotation
+  </a>
+  <nav class="tabs"><a href="/" class="on">Tasks</a></nav>
+  <div style="flex:1"></div>
+  <a class="btn sm" href="/settings" title="Annotators and data folders">Settings</a>
+  {% block header_right %}{% endblock %}
+</header>
+{% block content %}{% endblock %}
+<script src="/static/app.js"></script>
+</body>
+</html>

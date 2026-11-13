@@ -1,0 +1,55 @@
+# Emotion Triplet Codebook configuration.
+# Definitions and arousal hints are taken from the Emotion Triplet Codebook.
+version: 1
+
+tags:   # 30 tags, order matches Sheet1 of the comparison workbook
+  - {name: happiness, definition: "Feeling pleased, satisfied, happy or delighted about a desirable event."}
+  - {name: sadness, definition: "Feeling of loss, helplessness or sorrow for one's own misfortune."}
+  - {name: anger, definition: "Feeling displeased, dissatisfied, annoyed, frustrated, hostile or rage caused by an undesirable event."}
+  - {name: surprise, definition: "Unexpected or astonishing event, fact or thing; sudden shocking experience."}
+  - {name: fear, definition: "Belief that something is dangerous or a threat; dread, apprehension, anxiety or worry."}
+  - {name: disgust, definition: "Something offensive, poisonous or contaminating, perceived by the senses, by actions and appearances, or by ideas."}
+  - {name: disappointment, definition: "Displeasure caused by the non-fulfillment of one's hopes or expectations."}
+  - {name: hate, definition: "Dislike, distaste or aversion; profound disapproval aroused by something unpleasant or offensive."}
+  - {name: admiration, definition: "Someone or something regarded as impressive or worthy of respect; honoring or looking up to someone."}
+  - {name: amusement, definition: "State of finding something funny or entertaining."}
+  - {name: boredom, definition: "Feeling dull, uninterested or left without anything in particular to do."}
+  - {name: confidence, definition: "Self-assurance from one's appreciation of one's own abilities; feeling one can trust or rely on someone or something."}
+  - {name: curiosity, definition: "Strong desire to know or learn something."}
+  - {name: desperation, definition: "Complete loss of hope or despair, often leading to rash behavior; driven by great need or distress."}
+  - {name: doubt, definition: "Bewildered, confused or uncertain; mixed feelings; distrust or suspicion."}
+  - {name: excitement, definition: "Great enthusiasm and anticipation for an expected or longed-for good event."}
+  - {name: exhaustion, definition: "State of physical or mental fatigue or feeling tired."}
+  - {name: fascination, definition: "Fascinated, amazed or interested; feeling of great wonder or awe."}
+  - {name: gratitude, definition: "Thankful, or ready to show appreciation for and return kindness."}
+  - {name: hope, definition: "Expectation and desire for a certain event to happen, or grounds for believing something good will happen."}
+  - {name: indifference, definition: "Lack of interest, concern, or sympathy."}
+  - {name: inspiration, definition: "Makes someone want to do something, or gives someone an idea about what to do or create."}
+  - {name: jealousy, definition: "Envy of someone's achievements and advantages; suspicion of someone's unfaithfulness."}
+  - {name: longing, definition: "Yearning for or missing someone or something one cannot easily have; nostalgia."}
+  - {name: love, definition: "Feeling of affection or natural liking towards another person, event or thing."}
+  - {name: pride, definition: "Deep pleasure from one's own achievements, those of people close to one, or widely admired qualities or possessions."}
+  - {name: regret, definition: "Remorse or repentance over something that has happened; guilt over having done wrong."}
+  - {name: relaxed, definition: "Feeling calm, at ease; relief following release from anxiety or distress."}
+  - {name: shame, definition: "Humiliation or embarrassment from wrong or foolish behavior; feeling uncomfortable or awkward."}
+  - {name: sympathy, definition: "Pity and sorrow for someone else's misfortune; empathy with another's feelings."}
+
+# Decision 4: only these tags carry cause object / cause action / experiencer.
+section2_tags: [happiness, sadness, anger, surprise, fear, disgust, disappointment, hate]
+
+polarities: [positive, negative, neutral, none]   # `none` is exclusive
+
+arousal:
+  1: "Very low arousal (e.g. hope)"
+  2: "Low arousal (e.g. disappointment, confidence, exhaustion, shame)"
+  3: "Moderate arousal (e.g. admiration, desperation, gratitude, curiosity, pride)"
+  4: "High arousal (e.g. fascination, surprise)"
+  5: "Very high arousal (e.g. fear, hate, love)"
+
+sources: [self, other person, no one]
+
+separators:
+  field: ";;"        # between emotions
+  multi: "&&"        # between objects / action groups
+  action: "//"       # between actions of ONE object (decision 2)
+  cue: ","           # between cues of one emotion

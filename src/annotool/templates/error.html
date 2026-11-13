@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Not available{% endblock %}
+{% block content %}
+<main style="max-width:640px">
+  <div class="card" style="gap:12px">
+    <div class="eyebrow">{{ status }}</div>
+    <h2 class="title" style="margin:0">{% if status == 404 %}We couldn't find that{% else %}Something went wrong{% endif %}</h2>
+    <p class="muted" style="margin:0">{{ detail }}</p>
+    <p class="muted" style="margin:0">If a batch was removed or renamed, go back to the Tasks page and open it from there.</p>
+    <div class="actions"><a class="btn primary" href="/">Back to Tasks</a></div>
+  </div>
+</main>
+{% endblock %}

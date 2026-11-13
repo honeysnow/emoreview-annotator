@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Review</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F7F6F3;--surface:#FFFFFF;--line:#E7E4DD;--ink:#1F1E1B;--muted:#6B675F;--accent:#2F4BD8;--accent-soft:#EEF1FD;--warn:#B45309;--warn-soft:#FDF0E1;--ok:#0F766E;--ok-soft:#E3F4F1}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.45}
+a{color:inherit;text-decoration:none}
+button,input,textarea{font:inherit;color:inherit}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.srow:hover{background:#FAF9F6}
+.mini:hover{border-color:#B9B5AC}
+</style>
+</helmet>
+<div style="min-height:1040px;background:var(--bg);display:flex;flex-direction:column">
+
+  <header style="display:flex;align-items:center;gap:20px;padding:0 24px;min-height:56px;box-sizing:border-box;background:var(--surface);border-bottom:1px solid var(--line);flex-wrap:wrap">
+    <a href="Main.dc.html" style="display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px">
+      <span style="width:24px;height:24px;border-radius:7px;background:var(--accent);display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="5" cy="7" r="3.5" stroke="#fff" stroke-width="1.5"/><circle cx="9" cy="7" r="3.5" stroke="#fff" stroke-width="1.5"/></svg></span>
+      Emotion Annotation
+    </a>
+    <nav style="display:flex;gap:4px;background:var(--bg);padding:3px;border-radius:9px">
+      <a href="Main.dc.html" style="padding:6px 14px;border-radius:7px;color:var(--muted)">Tasks</a>
+      <a href="Annotate.dc.html" style="padding:6px 14px;border-radius:7px;color:var(--muted)">Annotate</a>
+      <a href="Review.dc.html" style="padding:6px 14px;border-radius:7px;background:var(--surface);font-weight:500;box-shadow:0 1px 2px rgba(0,0,0,.06)">Review</a>
+    </nav>
+    <span style="color:var(--muted)">TRAIN_2 · Cell Phones &amp; Accessories <span style="margin:0 6px">/</span> <span style="color:var(--ink);font-weight:500">OYC × TJH</span></span>
+    <div style="flex:1"></div>
+    <span style="display:flex;align-items:center;gap:6px;color:var(--muted);font-size:13px"><span style="width:7px;height:7px;border-radius:50%;background:#2E9E5B"></span>Saved just now</span>
+    <a href="Export.dc.html" style="padding:8px 14px;border:1px solid var(--line);border-radius:9px;background:var(--surface);font-weight:500">Export</a>
+    <span style="width:28px;height:28px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">HZY</span>
+  </header>
+
+  <div style="display:flex;flex-wrap:wrap;flex:1;align-items:stretch">
+
+    <!-- LEFT: queue -->
+    <aside style="flex:0 0 280px;box-sizing:border-box;background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column">
+      <div style="padding:16px 20px 12px;border-bottom:1px solid var(--line)">
+        <div style="font-weight:600;margin-bottom:10px">Sentences</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <sc-for list="{{filters}}" as="f" hint-placeholder-count="3">
+            <button onClick="{{f.pick}}" aria-pressed="{{f.on}}" style="padding:5px 11px;border-radius:16px;cursor:pointer;font-size:12px;font-weight:500;border:1px solid {{f.border}};background:{{f.bg}};color:{{f.fg}}">{{f.label}} <span style="opacity:.7">{{f.n}}</span></button>
+          </sc-for>
+        </div>
+      </div>
+      <div style="flex:1">
+        <sc-for list="{{queue}}" as="q" hint-placeholder-count="6">
+          <button class="srow" onClick="{{q.pick}}" style="display:flex;gap:12px;width:100%;text-align:left;padding:12px 20px;border:0;border-bottom:1px solid var(--line);background:{{q.bg}};cursor:pointer;box-shadow:{{q.edge}}">
+            <span style="flex:1;min-width:0">
+              <span style="display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--muted)"><span>{{q.id}}</span><span style="padding:1px 8px;border-radius:10px;font-weight:500;background:{{q.pillBg}};color:{{q.pillFg}}">{{q.pill}}</span></span>
+              <span style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:3px;font-size:13px">{{q.text}}</span>
+            </span>
+          </button>
+        </sc-for>
+        <div style="padding:14px 20px;color:var(--muted);font-size:13px">+ 593 more sentences · DCP0101 – DCP0200</div>
+      </div>
+    </aside>
+
+    <!-- CENTER -->
+    <main style="flex:1 1 560px;min-width:0;box-sizing:border-box;padding:28px 32px;display:flex;flex-direction:column;gap:20px">
+
+      <section style="background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 28px">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px">
+          <span style="color:var(--muted);font-size:12px;font-weight:500;letter-spacing:.06em">{{curId}} · {{curDoc}}</span>
+          <span style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)">Highlight cues from
+            <span style="display:flex;gap:3px;background:var(--bg);padding:3px;border-radius:8px">
+              <sc-for list="{{cueModes}}" as="c" hint-placeholder-count="3">
+                <button onClick="{{c.pick}}" aria-pressed="{{c.on}}" style="padding:3px 10px;border-radius:6px;border:0;cursor:pointer;font-size:12px;font-weight:500;background:{{c.bg}};color:{{c.fg}}">{{c.label}}</button>
+              </sc-for>
+            </span>
+          </span>
+        </div>
+        <div style="font-size:20px;line-height:1.9;display:flex;flex-wrap:wrap;gap:0 6px">
+          <sc-for list="{{tokens}}" as="t" hint-placeholder-count="12"><span style="padding:0 3px;border-radius:5px;{{t.style}}">{{t.w}}</span></sc-for>
+        </div>
+      </section>
+
+      <section style="background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden">
+        <div style="overflow-x:auto">
+        <div style="min-width:760px">
+          <div style="display:grid;grid-template-columns:150px 1fr 1fr 1.25fr 52px;gap:16px;padding:12px 20px;border-bottom:1px solid var(--line);font-size:12px;font-weight:500;color:var(--muted);align-items:center">
+            <span>Field</span><span>OYC</span><span>TJH</span><span>Final</span><span style="text-align:center" title="Exact match between OYC and TJH">Match</span>
+          </div>
+          <sc-for list="{{fields}}" as="f" hint-placeholder-count="8">
+            <div style="display:grid;grid-template-columns:150px 1fr 1fr 1.25fr 52px;gap:16px;padding:14px 20px;border-bottom:1px solid var(--line);align-items:start;background:{{f.bg}};box-shadow:{{f.edge}}">
+              <span style="font-weight:500;padding-top:2px;color:{{f.labelFg}}">{{f.label}}</span>
+              <div style="padding:2px 8px;margin:-2px -8px;border-radius:8px;background:{{f.aBg}};color:{{f.cellFg}}">
+                <sc-for list="{{f.aParts}}" as="p" hint-placeholder-count="2"><span style="margin-right:4px;border-radius:3px;{{p.style}}">{{p.t}}</span></sc-for>
+                <sc-if value="{{f.aEmpty}}" hint-placeholder-val="{{false}}"><span style="color:#9A968D;font-style:italic">not annotated</span></sc-if>
+              </div>
+              <div style="padding:2px 8px;margin:-2px -8px;border-radius:8px;background:{{f.bBg}};color:{{f.cellFg}}">
+                <sc-for list="{{f.bParts}}" as="p" hint-placeholder-count="2"><span style="margin-right:4px;border-radius:3px;{{p.style}}">{{p.t}}</span></sc-for>
+                <sc-if value="{{f.bEmpty}}" hint-placeholder-val="{{false}}"><span style="color:#9A968D;font-style:italic">not annotated</span></sc-if>
+              </div>
+              <div>
+                <div aria-label="Final value for {{f.label}}" style="width:100%;box-sizing:border-box;padding:6px 10px;border-radius:8px;border:1px solid {{f.inBorder}};background:{{f.inBg}};font-size:13px;min-height:32px;color:{{f.finalFg}}">{{f.finalDisp}}</div>
+                <sc-if value="{{f.disagree}}" hint-placeholder-val="{{false}}">
+                  <div style="display:flex;gap:6px;margin-top:6px">
+                    <button class="mini" onClick="{{f.useA}}" style="padding:3px 10px;border-radius:7px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:12px;font-weight:500">Use OYC</button>
+                    <button class="mini" onClick="{{f.useB}}" style="padding:3px 10px;border-radius:7px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:12px;font-weight:500">Use TJH</button>
+                    <button class="mini" title="Opens the structured editor (same widgets as Annotate)" style="padding:3px 10px;border-radius:7px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:12px;font-weight:500">Edit…</button>
+                  </div>
+                </sc-if>
+              </div>
+              <span title="{{f.matchTitle}}" style="justify-self:center;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;background:{{f.mBg}};color:{{f.mFg}}">{{f.mark}}</span>
+            </div>
+          </sc-for>
+        </div>
+        </div>
+      </section>
+
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding-bottom:8px">
+        <button onClick="{{prev}}" style="padding:10px 16px;border-radius:9px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-weight:500">← Previous</button>
+        <button onClick="{{nextOpen}}" style="padding:10px 16px;border-radius:9px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-weight:500">Next disagreement</button>
+        <button onClick="{{acceptAll}}" style="padding:10px 16px;border-radius:9px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-weight:500">Use OYC for all open fields</button>
+        <span style="flex:1"></span>
+        <span style="color:var(--muted);font-size:13px">{{resolvedText}}</span>
+        <button onClick="{{next}}" style="padding:10px 22px;border-radius:9px;border:0;background:var(--accent);color:#fff;cursor:pointer;font-weight:500">Resolve &amp; next →</button>
+      </div>
+    </main>
+
+    <!-- RIGHT -->
+    <aside style="flex:0 0 340px;box-sizing:border-box;padding:28px 24px 28px 0;display:flex;flex-direction:column;gap:16px">
+      <section style="background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px">
+        <div style="font-weight:600;margin-bottom:10px">Flags for this sentence</div>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <sc-for list="{{flags}}" as="g" hint-placeholder-count="3">
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px">
+              <span style="flex:0 0 16px;height:16px;margin-top:1px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;background:{{g.bg}};color:{{g.fg}}" aria-hidden="true">{{g.mark}}</span>
+              <span>{{g.msg}}</span>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <section style="background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px">
+        <label for="note" style="display:block;font-weight:600;margin-bottom:8px">Reviewer note</label>
+        <textarea id="note" rows="3" placeholder="Why this call? (optional, exported as a comment)" style="width:100%;box-sizing:border-box;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);resize:vertical;font-size:13px"></textarea>
+      </section>
+
+      <section style="background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px"><span style="font-weight:600">Agreement · all 599 sentences</span><span style="font-size:12px;color:var(--muted)">exact match</span></div>
+        <div style="font-size:28px;font-weight:600;letter-spacing:-0.01em;margin-bottom:12px">71% <span style="font-size:13px;font-weight:400;color:var(--muted)">mean across fields</span></div>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <sc-for list="{{agree}}" as="a" hint-placeholder-count="8">
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>{{a.label}}</span><span style="font-weight:500;color:{{a.fg}}">{{a.pct}}%</span></div>
+              <div style="height:5px;background:var(--bg);border-radius:5px;overflow:hidden"><div style="height:100%;border-radius:5px;background:{{a.bar}};width:{{a.pct}}%"></div></div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+    </aside>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1040}}'>
+const FIELDS = ['Polarity', 'Arousal', 'Emotion Tag', 'Emotion Cues', 'Emotion Source', 'Cause Object', 'Cause Action', 'Emotion Experiencer'];
+// [A, B] per field in FIELDS order. '' = left blank. Real rows from TRAIN_2 comparison sheet.
+const ROWS = [
+  { id: 'CP000721', doc: 'DCP0101', text: 'these multi-charging cables are great for families with different types of mobile phone charger needs .',
+    v: [['positive', 'positive'], ['3', '3'], ['happiness', 'happiness'], ['great', 'great'], ['no one', 'no one'], ['multi-charging cables', 'cables'], ['none', 'multi-charging'], ['none', 'none']],
+    preset: { 5: 'cables', 6: 'multi-charging' } },
+  { id: 'CP000722', doc: 'DCP0101', text: 'most of my family use the usb c type cables but my daughter has an iphone .',
+    v: [['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', ''], ['', '']], preset: {} },
+  { id: 'CP000723', doc: 'DCP0101', text: 'the cables are braided and seem durable .',
+    v: [['positive', 'positive'], ['3', '3'], ['happiness', 'happiness'], ['durable', 'none'], ['no one', 'no one'], ['cables', 'cables'], ['braided // durable', 'braided // durable'], ['none', 'none']], preset: {} },
+  { id: 'CP000725', doc: 'DCP0101', text: 'they seem to charge at a normal speed .',
+    v: [['negative', ''], ['2', ''], ['disappointment', ''], ['normal speed', ''], ['no one', ''], ['they', ''], ['charge at a normal speed', ''], ['none', '']], preset: {} },
+  { id: 'CP000728', doc: 'DCP0102', text: "it offers adequate protection to my daughter 's iphone .",
+    v: [['positive', 'positive'], ['3', '3'], ['happiness', 'happiness'], ['adequate protection', 'none'], ['other person', 'self'], ['it', 'it'], ["offers adequate protection to my daughter 's iphone", 'offers adequate protection'], ['my', 'my daughter']], preset: {} },
+  { id: 'CP000733', doc: 'DCP0103', text: "i 've seen him drop his phone at least once since he 's gotten it and there has been no problems .",
+    v: [['neutral', 'positive'], ['4', '3'], ['surprise', 'happiness'], ['drop his phone at least once, there has been no problems', 'no problems'], ['self', 'self'], ['phone', 'it'], ['drop // no problems', 'none'], ['i', 'he']], preset: {} }
+];
+const AGREE = [['Polarity', 79.3], ['Arousal', 76.5], ['Emotion Tag', 76.1], ['Emotion Cues', 46.7], ['Emotion Source', 82.8], ['Cause Object', 71.1], ['Cause Action', 57.9], ['Experiencer', 79.3]];
+
+class Component extends DCLogic {
+  D() {
+    if (this._D) return this._D;
+    const fin = ROWS.map((r) => r.v.map((p, i) => {
+      if (p[0] === p[1]) return { v: p[0], set: true };
+      if (r.preset[i] !== undefined) return { v: r.preset[i], set: true };
+      return { v: '', set: false };
+    }));
+    this._D = { cur: 4, filter: 'all', cueMode: 'a', fin };
+    return this._D;
+  }
+
+  rowInfo(i) {
+    const D = this.D();
+    const r = ROWS[i];
+    const diff = r.v.filter((p) => p[0] !== p[1]).length;
+    const open = r.v.filter((p, k) => p[0] !== p[1] && !D.fin[i][k].set).length;
+    const status = diff === 0 ? 'agreed' : (open === 0 ? 'resolved' : 'open');
+    return { diff, open, status };
+  }
+
+  renderVals() {
+    const self = this;
+    const D = this.D();
+    const upd = () => self.forceUpdate();
+    const r = ROWS[D.cur];
+    const toks = r.text.split(' ');
+    const info = this.rowInfo(D.cur);
+
+    // filters + queue
+    const infos = ROWS.map((x, i) => this.rowInfo(i));
+    const count = (f) => infos.filter((x) => f === 'all' ? true : (f === 'dis' ? x.diff > 0 : x.status === 'open')).length;
+    const filters = [['all', 'All'], ['dis', 'Disagreements'], ['open', 'Unresolved']].map((f) => {
+      const on = D.filter === f[0];
+      return { label: f[1], n: count(f[0]), on, border: on ? '#2F4BD8' : '#E7E4DD', bg: on ? '#EEF1FD' : '#FFFFFF', fg: on ? '#2F4BD8' : '#1F1E1B', pick: () => { D.filter = f[0]; upd(); } };
+    });
+    const queue = [];
+    ROWS.forEach((x, i) => {
+      const inf = infos[i];
+      if (D.filter === 'dis' && inf.diff === 0) return;
+      if (D.filter === 'open' && inf.status !== 'open') return;
+      const active = i === D.cur;
+      let pill = 'agreed', pillBg = '#E3F4F1', pillFg = '#0F766E';
+      if (inf.status === 'resolved') { pill = 'resolved'; pillBg = '#EEF1FD'; pillFg = '#2F4BD8'; }
+      if (inf.status === 'open') { pill = inf.open + ' open'; pillBg = '#FDF0E1'; pillFg = '#B45309'; }
+      queue.push({ id: x.id, text: x.text, pill, pillBg, pillFg, bg: active ? '#F3F5FE' : 'transparent', edge: active ? 'inset 3px 0 0 #2F4BD8' : 'none', pick: () => { D.cur = i; upd(); } });
+    });
+
+    // cue highlight
+    const cueModes = [['a', 'OYC'], ['b', 'TJH'], ['off', 'Off']].map((m) => {
+      const on = D.cueMode === m[0];
+      return { label: m[1], on, bg: on ? '#FFFFFF' : 'transparent', fg: on ? '#1F1E1B' : '#6B675F', pick: () => { D.cueMode = m[0]; upd(); } };
+    });
+    const hl = {};
+    if (D.cueMode !== 'off') {
+      const cueStr = r.v[3][D.cueMode === 'a' ? 0 : 1];
+      if (cueStr && cueStr !== 'none') {
+        cueStr.split(', ').forEach((ph) => {
+          const p = ph.trim().split(' ');
+          for (let i = 0; i + p.length <= toks.length; i++) {
+            let ok = true;
+            for (let j = 0; j < p.length; j++) if (toks[i + j] !== p[j]) { ok = false; break; }
+            if (ok) { for (let j = 0; j < p.length; j++) hl[i + j] = true; break; }
+          }
+        });
+      }
+    }
+    const tokens = toks.map((w, i) => ({ w, style: hl[i] ? 'background:#FFE9A8;box-shadow:inset 0 -2px 0 #C99700' : '' }));
+
+    // fields
+    const parts = (s, other) => {
+      if (!s) return [];
+      const ot = other ? other.split(' ') : [];
+      return s.split(' ').map((t) => ({ t, style: (s !== other && ot.indexOf(t) < 0 && other !== '') ? 'background:#FBDDB0' : '' }));
+    };
+    const fields = FIELDS.map((label, k) => {
+      const a = r.v[k][0], b = r.v[k][1];
+      const f = D.fin[D.cur][k];
+      const dis = a !== b;
+      const open = dis && !f.set;
+      const pickedA = dis && f.set && f.v === a, pickedB = dis && f.set && f.v === b;
+      return {
+        label, disagree: dis,
+        aParts: parts(a, b), bParts: parts(b, a), aEmpty: a === '', bEmpty: b === '',
+        aBg: pickedA ? '#EEF1FD' : 'transparent', bBg: pickedB ? '#EEF1FD' : 'transparent',
+        cellFg: dis ? '#1F1E1B' : '#6B675F', labelFg: dis ? '#1F1E1B' : '#6B675F',
+        bg: open ? '#FFFBF5' : 'transparent', edge: open ? 'inset 3px 0 0 #B45309' : 'none',
+        finalDisp: f.v !== '' ? f.v : (open ? 'Pick a value' : '—'), finalFg: f.v !== '' ? '#1F1E1B' : '#9A968D',
+        inBorder: open ? '#E0B27A' : '#E7E4DD', inBg: open ? '#FFFFFF' : (dis ? '#FFFFFF' : '#FAF9F6'),
+        mark: dis ? 'X' : '✓', mBg: dis ? '#FDF0E1' : '#E3F4F1', mFg: dis ? '#B45309' : '#0F766E',
+        matchTitle: dis ? 'Differs (exported as X)' : 'Match (exported as -)',
+        useA: () => { D.fin[D.cur][k] = { v: a, set: true }; upd(); },
+        useB: () => { D.fin[D.cur][k] = { v: b, set: true }; upd(); },
+        edit: (ev) => { const v = ev && ev.target ? ev.target.value : ''; D.fin[D.cur][k] = { v, set: v !== '' }; upd(); }
+      };
+    });
+
+    // flags
+    const flags = [];
+    const fl = (ok, msg) => flags.push({ mark: ok ? '✓' : '!', bg: ok ? '#E3F4F1' : '#FDF0E1', fg: ok ? '#0F766E' : '#B45309', msg });
+    ['OYC', 'TJH'].forEach((nm, w) => {
+      const tag = r.v[2][w], cue = r.v[3][w], pol = r.v[0][w];
+      const none = pol === '' && tag === '' && cue === '';
+      if (r.v.every((p) => p[w] === '') && r.v.some((p) => p[1 - w] !== '')) { fl(false, nm + ' left this sentence unannotated.'); return; }
+      if (tag && (cue === '' || cue === 'none')) fl(false, nm + ' tagged “' + tag + '” but gave no emotion cue.');
+      if (cue && cue !== 'none') cue.split(', ').forEach((ph) => { if (r.text.indexOf(ph.trim()) < 0) fl(false, nm + ' cue “' + ph + '” is not in the sentence.'); });
+    });
+    r.v.forEach((p, k) => { if (p[0] !== p[1] && p[0] !== '' && p[1] !== '' && p[0].trim().toLowerCase() === p[1].trim().toLowerCase()) fl(false, FIELDS[k] + ' differs only by case or spacing.'); });
+    if (info.diff === 0) fl(true, 'Both annotators agree on every field.');
+    else if (flags.length === 0) fl(true, 'No automatic issues. ' + info.diff + ' field' + (info.diff === 1 ? '' : 's') + ' need a decision.');
+
+    const goNext = (from, onlyOpen) => () => {
+      for (let s = 1; s <= ROWS.length; s++) {
+        const i = (from + s) % ROWS.length;
+        if (!onlyOpen || this.rowInfo(i).status === 'open') { D.cur = i; upd(); return; }
+      }
+      upd();
+    };
+    return {
+      filters, queue, cueModes, tokens, fields, flags,
+      curId: r.id, curDoc: r.doc,
+      agree: AGREE.map((x) => ({ label: x[0], pct: x[1], fg: x[1] < 60 ? '#B45309' : '#1F1E1B', bar: x[1] < 60 ? '#B45309' : '#2F4BD8' })),
+      resolvedText: info.diff === 0 ? 'Nothing to resolve' : ((info.diff - info.open) + ' of ' + info.diff + ' resolved'),
+      prev: () => { D.cur = (D.cur + ROWS.length - 1) % ROWS.length; upd(); },
+      next: goNext(D.cur, false), nextOpen: goNext(D.cur, true),
+      acceptAll: () => { r.v.forEach((p, k) => { if (p[0] !== p[1] && !D.fin[D.cur][k].set) D.fin[D.cur][k] = { v: p[0], set: true }; }); upd(); }
+    };
+  }
+}
+</script>
+</body>
+</html>

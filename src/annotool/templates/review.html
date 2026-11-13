@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Review · {{ batch.name }}{% endblock %}
+{% block header_right %}
+<span class="muted crumb">{{ batch.name }}</span>
+<span style="flex:1"></span>
+<a class="btn sm" href="/export?type=comparison&review={{ batch.name }}">Export</a>
+<span class="savestate" id="savestate"><i></i><span>Saved</span></span>
+{% if current %}<button class="avatar" id="rename-annotator" data-code="{{ current }}" title="Reviewer (current user). Click to switch.">{{ current }}</button>{% endif %}
+{% endblock %}
+{% block content %}
+<div class="a-layout" id="app">
+  <aside class="a-left">
+    <div class="a-left-head">
+      <div class="row" style="margin:0"><b>Sentences</b><span class="muted" id="q-count"></span></div>
+      <div class="chips" id="filters" style="margin-top:10px;gap:6px"></div>
+    </div>
+    <div id="queue"></div>
+  </aside>
+
+  <main class="a-main">
+    <section class="panel">
+      <div class="row small muted"><span id="sent-label" style="font-weight:500;letter-spacing:.06em"></span>
+        <span class="seg" id="cue-modes"></span></div>
+      <div id="tokens" class="tokens" style="user-select:text"></div>
+    </section>
+
+    <section class="panel" style="padding:8px 0;gap:0">
+      <div class="rgrid rhead"><span>Field</span><span id="h-a"></span><span id="h-b"></span><span>Final</span><span>Match</span></div>
+      <div id="fields"></div>
+    </section>
+
+    <div class="footer">
+      <button class="btn" id="prev">← Previous</button>
+      <button class="btn" id="next-open">Next disagreement</button>
+      <button class="btn" id="use-a">Use A for all open fields</button>
+      <span style="flex:1"></span>
+      <button class="btn link" id="help-open" type="button" title="Keyboard shortcuts">Shortcuts (?)</button>
+      <button class="btn primary" id="resolve" style="padding:10px 22px">Resolve &amp; next →</button>
+    </div>
+  </main>
+
+  <aside class="a-right">
+    <section class="panel sm"><b style="display:block;margin-bottom:10px">Flags for this sentence</b><div id="flags" class="checks"></div></section>
+    <section class="panel sm"><b style="display:block;margin-bottom:8px">Reviewer note</b><textarea id="note" rows="3" class="note-in" placeholder="Why did you decide this way? (optional)"></textarea></section>
+    <section class="panel sm"><div class="row" style="margin-bottom:10px"><b>Agreement</b><span class="muted small" id="ag-mean"></span></div><div id="agreement"></div></section>
+  </aside>
+</div>
+
+<div id="help" class="modal" hidden><div class="modal-card small"><b>Keyboard shortcuts</b>
+  <table class="keys"><tr><td><kbd>←</kbd> <kbd>→</kbd></td><td>Previous / next sentence</td></tr><tr><td><kbd>n</kbd></td><td>Next disagreement</td></tr>
+  <tr><td><kbd>?</kbd></td><td>Show / hide this list</td></tr></table>
+  <p class="muted small">Final values are set with Use A, Use B or Edit… (never typed). Decisions save immediately.</p>
+  <div class="actions"><button class="btn" id="help-close" type="button">Close</button></div></div></div>
+<div id="modal" class="modal" hidden>
+  <div class="modal-card">
+    <div class="row" style="margin:0 0 8px"><b id="modal-title"></b>
+      <span class="muted small">Build the Final value with the same widgets as Annotate. Start from
+        <button class="btn sm" id="seed-a" type="button"></button> <button class="btn sm" id="seed-b" type="button"></button></span></div>
+    <iframe id="modal-frame" title="Structured editor"></iframe>
+    <div class="row" style="margin:10px 0 0;justify-content:flex-end;gap:10px">
+      <button class="btn" id="modal-cancel" type="button">Cancel</button>
+      <button class="btn primary" id="modal-use" type="button">Use this for the field</button>
+    </div>
+  </div>
+</div>
+<script type="application/json" id="boot">{{ boot|tojson }}</script>
+<script src="/static/review.js"></script>
+{% endblock %}
